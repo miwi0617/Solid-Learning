@@ -89,7 +89,7 @@
                 <li><a href="{{ url_for('signUp') }}">Sign Up</a></li>
                 <li class="divider-vertical"></li>
                 <li class="dropdown">
-                  <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In<strong class="caret"></strong></a>
+                  <a class="dropdown-toggle" href="{{ url_for('main') }}" data-toggle="dropdown">Sign In<strong class="caret"></strong></a>
                   <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
                     <form action="[YOUR ACTION]" method="post" accept-charset="UTF-8">
                       <input id="user_username" style="margin-bottom: 15px;" type="text" name="user[username]" size="30" placeholder="Username"/>
@@ -97,7 +97,8 @@
                       <input id="user_remember_me" style="float: left; margin-right: 10px;" type="checkbox" name="user[remember_me]" value="1" />
                       <label class="string optional" for="user_remember_me"> Remember me</label>
 
-                      <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
+                      <a class="btn btn-primary" role="button">Sign In</a>
+
                     </form>
                     <!-- Login form here -->
                   </div>
@@ -126,7 +127,7 @@
               <p>Welcome to</p>
               <h1>Solid Learning</h1>
               <p>Where dreams become reality</p>
-              <p><a class="btn btn-lg btn-primary" href="signUp.html" role="button">Sign up today</a></p>
+              <p><a class="btn btn-lg btn-primary" href="{{ url_for('signUp') }}" role="button">Sign up today</a></p>
             </div>
           </div>
         </div>
@@ -135,7 +136,8 @@
             <div class="carousel-caption">
               <h1>Visit our Forum</h1>
               <p>For any questions you have about Solid Works</p>
-              <p><a class="btn btn-lg btn-primary" href="#" role="button">Forum</a></p>
+              <p><h6>(Not real forum shh just ask questions)</h6></p>
+              <p><a class="btn btn-lg btn-primary" href="{{ url_for('forum') }}" role="button">Forum</a></p>
             </div>
           </div>
         </div>
@@ -144,7 +146,31 @@
             <div class="carousel-caption">
               <h1>About the Creators</h1>
               <p>Danim Jeong and Michael Williams</p>
-              <p><a class="btn btn-lg btn-primary" href="#" role="button">Contact us</a></p>
+          
+           <!-- Modal -->
+          <p><button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+            Contact Us
+          </button></p>
+
+         
+          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title" id="myModalLabel">Reply</h4>
+                </div>
+                <div class="modal-body">
+                  <textarea rows="3" class="form-control"></textarea>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
             </div>
           </div>
         </div>
@@ -167,7 +193,10 @@
           <center>
             <img src="../static/Dani.PNG" alt="Danim Jeong">
             <h2>Danim Jeong</h2>
-            <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+            <p>
+Intern Tissue Engineer Lab KAOC | 
+B.S. Mechanical Engineering; Computer Science Minor |
+University of Colorado at Boulder | Class of 2014</p>
             <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
           </center>
         </div><!-- /.col-lg-4 -->
@@ -176,7 +205,9 @@
 
             <img src="{{ url_for('static', filename = 'Mike.png') }}" alt="Michael Williams" Width="250" Height="200" border="5">
             <h2>Michael Williams</h2>
-            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+            <p>Developer DragonDev |
+              B.S. Computer Science; Japanese Minor |
+              University of Colorado at Boulder | Class of 2015</p>
             <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
             </center
             >        </div><!-- /.col-lg-4 -->
@@ -196,10 +227,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/holder.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/holder.js"></script>
     <script>
     $(function() {
       // Setup drop down menu

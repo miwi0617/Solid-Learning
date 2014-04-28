@@ -9,24 +9,33 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Glitch.db'
 db = SQLAlchemy(app)
 
-class User(db.Model):
+class Tutorials(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    pet_name = db.Column(db.String(80), unique=False)
-    gender = db.Column(db.String(80), unique=False)
-    breed_type = db.Column(db.String(80), unique=False)
-    age = db.Column(db.String(80), unique=False)
-    image_url = db.Column(db.String(1024), unique=False)
+    title = db.Column(db.String(80), unique=False)
+    image = db.Column(db.String(1024), unique=False)
+    description = db.Column(db.String(80), unique=False)
+    link = db.Column(db.String(1024), unique=False)
 
-    def __init__(self, pet_name, gender, breed_type, age, image_url):
-        self.pet_name = pet_name
-        self.gender = gender
-        self.breed_type = breed_type
-        self.age = age
-        self.image_url = image_url
+    def __init__(self, title, image, description, link):
+        self.title = title
+        self.image = image
+        self.description = description
+        self.link = link
 
     def __repr__(self):
-        return '[pet name: %r, gender:%r, breed type:%r, age:%r, URL:%r]' % (
-            self.pet_name, self.gender, self.breed_type, self.age, self.image_url)
+        return '[title: %r, image:%r, description:%r, link:%r]' % (
+            self.title, self.image, self.description, self.link)
+
+class Models(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    image = db.Column(db.String(1024), unique=False)
+
+    def __init__(self, image):
+        self.image = image
+
+    def __repr__(self):
+        return '[image:%r]' % (
+            self.image)
 
 class User2(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -36,19 +45,31 @@ class User2(db.Model):
     username = db.Column(db.String(80), unique=False)
     password = db.Column(db.String(80), unique=False)
     gender = db.Column(db.String(80), unique=False)
-    image_url = db.Column(db.String(1024), unique=False)
-    title = db.Column(db.String(80), unique=False)
 
-    def __init__(self, first, last, email, contact, image_url):
+    def __init__(self, first, last, email, username, password, gender):
         self.first = first
         self.last = last
         self.email = email
-        self.image_url = image_url
-        self.title = title
+        self.username = username
+        self.gender = gender
 
     def __repr__(self):
-        return '[first:%r, last:%r, email:%r, URL:%r, title:%r]' % (
-            self.first, self.last, self.email, self.image_url, self.title)
+        return '[first: %r, last:%r, email:%r, username:%r, password:%r, gender:%r]' % (
+            self.first, self.last, self.email, self.username, self.password, self.gender)
+
+class UserBinder(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Integer, unique=False)
+    image = db.Column(db.String(1024), unique=False)
+    description = db.Column(db.String(1024), unique=False)
+
+    def __init__(self, title, image, description):
+        self.title = title
+        self.image = image
+        self.description = description
+
+    def __repr__(self):
+        return '[title:%r, image%r, description%r]' % (self.title, self.image, self.description)
 
 @app.route('/')
 def main():
@@ -62,8 +83,8 @@ def hello(name=None):
 @app.route('/myBinder/')
 @app.route('/myBinder/<name>')
 def myBinder(name=None):
-    pet = User.query.limit(10).all()
-    return render_template('myBinder.html', pet=pet)
+    gravity = Models.query.limit(8).all()
+    return render_template('myBinder.html', gravity=gravity)
 
 @app.route('/signIn/')
 @app.route('/signIn/<name>')
@@ -78,7 +99,8 @@ def signUp(name=None):
 @app.route('/tutorial/')
 @app.route('/tutorial/<name>')
 def tutorial(name=None):
-    return render_template('tutorial.html', name=name)
+    pet = Tutorials.query.limit(4).all()
+    return render_template('tutorial.html', pet=pet)
 
 @app.route('/forum/')
 @app.route('/forum/<name>')
@@ -126,17 +148,23 @@ def search():
 if __name__ == "__main__":
     app.run()
 
+TutorialDatabase = [Tutorials('box', 'http://oi58.tinypic.com/122cig6.jpg', 'Basic box tutorial', 'http://www.youtube.com/watch?v=cy3ExIAcI2Y'),
+Tutorials('heart', 'http://oi58.tinypic.com/soqnpu.jpg', 'Fun heart tutorial', 'https://www.youtube.com/watch?v=mxWq4zKE2jY'),
+Tutorials('nut', 'http://oi57.tinypic.com/64jfc2.jpg', 'Great nut tutorial', 'http://www.youtube.com/watch?v=T_K79NHf9Gg'), 
+Tutorials('screw', 'http://oi59.tinypic.com/id6iom.jpg', 'Best nuts and screw tutorial', 'http://www.youtube.com/watch?v=hXwCE1P02wc')]
 
-h = [User('bob', 'male', 'pitbull', '11', 'http://www.monstropedia.org/images/thumb/d/d0/Boogeyman.jpg/250px-Boogeyman.jpg'),
-User('zack', 'male', 'golden', '3', 'http://www.monstropedia.org/images/thumb/d/d0/Boogeyman.jpg/250px-Boogeyman.jpg'),
-User('jenny', 'female', 'shepard', '4', 'http://wpc.556e.edgecastcdn.net/80556E/img.news/NE8zZcdd0INrbd_1_1.jpg'),
-User('mirna', 'female', 'akita', '5', 'http://www.tenorama.com/sites/default/files/fotoranking/boogeyman.jpg'),
-User('zara', 'female', 'terrier', '1', 'https://f0.bcbits.com/img/a3244199060_10.jpg'),
-User('guido', 'male', 'bulldog', '33', 'http://images1.wikia.nocookie.net/__cb20090303004114/ghostbusters/images/d/d4/Boogieman02.png'),
-User('ken', 'male', 'griffon', '112', 'http://4.bp.blogspot.com/_iMHXEljpe8s/Sd1pZHBI01I/AAAAAAAALJc/NU5hAmIfusE/s400/mcfarlane+toys-wonderful+wizard+of+oz-Boogeyman13-flickr.jpg'),
-User('ada', 'female', 'collie', '98', 'http://annalisegreen.com/wp-content/uploads/2011/09/Oogie-Boogie-nightmare-before-christmas-2854985-2033-2560.jpg'),
-User('steve', 'male', 'bloodhound', '111', 'http://anythinghorror.files.wordpress.com/2011/04/the-boogeyman-monster-make-up.jpg'),
-User('ztu', 'male', 'borzoi', '3244', 'http://www.boxofficeprophets.com/tickermaster/loadimage.cfm?image=boogeyman.jpg'),
-User('foo', 'NA', 'bulmastiff', '90', 'http://cdn2-b.examiner.com/sites/default/files/styles/image_content_width/hash/98/94/98945acd304212be5e59e7fb2f0fddd6.jpg?itok=SXLHPU2y')]
+ModelDatabase = [Models('http://files.solidworks.com/InternalMarketing/PressRoom/Automotive/solidworksbike.jpg'),
+Models('http://www.nvidia.com/content/quadro/professional-solutions/solidworks/image/realview-enhanced-3d-mode.jpg'),
+Models('http://www.personal.psu.edu/npf5008/SolidworksFinal_htm_m14df6603.jpg'),
+Models('https://forum.solidworks.com/servlet/JiveServlet/showImage/2-321453-55572/Capture+2.JPG'),
+Models('http://i35.tinypic.com/au7hc7.png'),
+Models('http://www.topfreemodel.com/uploads/images/SolidWorks-Models-Boeing-757-aircraft.jpg'),
+Models('http://www.topfreemodel.com/uploads/images/SolidWorks-Models-020-Vintage-Aircraft.jpg')]
 
-i = [User2()]
+UserDatabase = [User2('Bob', 'White', 'pitbull@dogs.com', 'Clean', 'Windex', 'male'),
+User2('Girl', 'Waldenburgeourgew', 'golden@child.com', 'WonderBread', 'password', 'female')]
+
+jokes = [UserBinder('box', 'http://oi58.tinypic.com/122cig6.jpg', 'Basic box tutorial'), 
+UserBinder('heart', 'http://oi58.tinypic.com/soqnpu.jpg', 'Fun heart tutorial'), 
+UserBinder('nut', 'http://oi57.tinypic.com/64jfc2.jpg', 'Great nut tutorial'), 
+UserBinder('screw', 'http://oi59.tinypic.com/id6iom.jpg', 'Best screw tutorial')]
